@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+
+    <h1 class="dashboard-title">Welcome to the Dashboard</h1>
+    <ul>
+        {% if not session['user_id'] %}
+            <li><a href="/login">Log In</a></li>
+      {% endif %}
+         {% if session['user_id'] %}
+            <li><a href="/draft">Create draft</a></li>
+      {% endif %}
+
+    </ul>
+    <hr>
+    <div>
+        {% for post in posts %}
+            <div>
+                <div>
+                    Title: {{ post[1] }}
+                </div>
+                <div>
+                    {{ post[2] }}
+                </div>
+                <div>
+                    Published Date: {{ post[4] }}
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+</body>
+</html>
