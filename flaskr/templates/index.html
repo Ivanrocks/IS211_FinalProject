@@ -2,38 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
     <title>Dashboard</title>
 </head>
 <body>
-
     <h1 class="dashboard-title">Welcome to the Dashboard</h1>
-    <ul>
+
+    <ul class="nav-menu">
         {% if not session['user_id'] %}
             <li><a href="/login">Log In</a></li>
-      {% endif %}
-         {% if session['user_id'] %}
-            <li><a href="/draft">Create draft</a></li>
+        {% endif %}
+        {% if session['user_id'] %}
+            <li><a href="/">Home</a></li>
+            <li><a href="/draft">Create Draft</a></li>
             <li><a href="/dashboard">User Dashboard</a></li>
-      {% endif %}
-
+        {% endif %}
     </ul>
-    <hr>
-    <div>
-        {% for post in posts %}
-            <div>
-                <div>
-                    Title: {{ post[1] }}
-                </div>
-                <div>
-                    {{ post[2]|safe }}
-                </div>
-                <div>
-                    Published Date: {{ post[4] }}
-                </div>
-            </div>
 
+    <hr>
+
+    <div class="posts-container">
+        {% for post in posts %}
+        <div class="post-card">
+            <div class="post-index">#{{ loop.index }}</div>
+            <div class="post-title">Title: {{ post[1] }}</div>
+            <div class="post-content">{{ post[2]|safe }}</div>
+            <div class="post-date">Published Date: {{ post[4] }}</div>
+        </div>
         {% endfor %}
     </div>
-
 </body>
 </html>
+``

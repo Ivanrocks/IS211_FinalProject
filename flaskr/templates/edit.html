@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Draft a post</title>
     <!-- include libraries(jQuery, bootstrap) -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -16,15 +15,16 @@
     <style>
         .note-editable{
             height: 600px;
+            width: 80%;
             margin: auto;
         }
     </style>
-            <link rel="stylesheet" href="/static/style.css">
+                <link rel="stylesheet" href="/static/style.css">
 
 </head>
 <body>
-    <h1>Draft a post</h1>
-  <ul class="nav-menu">
+    <h1>Edit post</h1>
+    <ul class="nav-menu">
         {% if not session['user_id'] %}
             <li><a href="/login">Log In</a></li>
         {% endif %}
@@ -43,12 +43,12 @@
         </ul>
       {% endif %}
     {% endwith %}
-    <form method="post" action="/draft">
+    <form method="post" action="/edit/{{post[0]}}">
         <label for="title">Title</label>
-        <input id="title" name="title" type="text"></input>
+        <input id="title" name="title" type="text" value="{{ post[1] }}"></input>
         <br>
-      <textarea id="summernote" name="editordata"  ></textarea>
-        <button type="submit">Create Post</button>
+      <textarea id="summernote" name="editordata"  style="width:320px; max-width:620px;">{{ post[2] }}</textarea>
+        <button type="submit">Save Post</button>
     </form>
 
     <script>

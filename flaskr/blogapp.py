@@ -14,30 +14,55 @@ def is_authenticated():
 @app.route('/')
 def index():
     posts = dbutility.get_all_posts()
-    print(posts)
     return render_template('index.html', posts = posts)
 
-@app.route('/publish/<int:user_id>')
-def publish():
+@app.route('/publish/<int:post_id>')
+def publish(post_id):
     if not is_authenticated():
         return redirect('/')
+    dbutility.publish_post(post_id)
     message = "Post Published"
     flash(message)
-    return render_template('dashboard.html')
+    posts = dbutility.get_all_posts_by_user(int(session['user_id']))
+    return render_template('dashboard.html', posts=posts)
 
-@app.route('/unpublish/<int:user_id>')
-def unpublish():
+@app.route('/unpublish/<int:post_id>')
+def unpublish(post_id):
     if not is_authenticated():
         return redirect('/')
+    dbutility.unpublish_post(post_id)
     message = "Post unpublished"
     flash(message)
-    return render_template('dashboard.html')
+    posts = dbutility.get_all_posts_by_user(int(session['user_id']))
+    return render_template('dashboard.html', posts=posts)
+
+@app.route('/delete/<int:post_id>')
+def delete(post_id):
+    if not is_authenticated():
+        return redirect('/')
+    dbutility.delete_post(post_id)
+    message = "Post deleted"
+    flash(message)
+    posts = dbutility.get_all_posts_by_user(int(session['user_id']))
+    return render_template('dashboard.html', posts=posts)
+
+@app.route('/edit/<int:post_id>', methods=('GET', 'POST'))
+def edit(post_id):
+    if not is_authenticated():
+        return redirect('/')
+    if request.method == "POST":
+        title = request.form['title']
+        content = request.form['editordata']
+        dbutility.update_post(post_id,title, content)
+        message = "Post Saved"
+        flash(message)
+    post = dbutility.get_post(post_id)
+    return render_template('edit.html', post=post)
 
 @app.route('/dashboard')
 def dashboard():
     if not is_authenticated():
         return redirect('/')
-    print(session['user_id'])
     posts = dbutility.get_all_posts_by_user(int(session['user_id']))
     return render_template('dashboard.html', posts = posts)
 
@@ -74,7 +99,7 @@ def login():
             session.clear()
             session['user_id'] = user[0]
             print("User authenticated")
-            return redirect('/')
+            return redirect('/dashboard')
     return render_template('login.html')
 
 

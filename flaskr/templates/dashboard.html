@@ -2,46 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
     <title>Dashboard</title>
 </head>
 <body>
+    <h1 class="dashboard-title">Welcome to the User Dashboard</h1>
 
-    <h1 class="dashboard-title">Welcome to the Dashboard</h1>
-    <ul>
+    <ul class="nav-menu">
         {% if not session['user_id'] %}
             <li><a href="/login">Log In</a></li>
-      {% endif %}
-         {% if session['user_id'] %}
-            <li><a href="/draft">Create draft</a></li>
-      {% endif %}
-
+        {% endif %}
+        {% if session['user_id'] %}
+            <li><a href="/">Home</a></li>
+            <li><a href="/draft">Create Draft</a></li>
+        {% endif %}
     </ul>
+
     <hr>
-    <table>
-        {% for post in posts %}
-            <tr>
 
-                <td>
-                    Title: {{ post[1] }}
-                </td>
-                <td>
-                    {% if post[3] == 'published' %}
-                    <a href="{{ url_for('unpublish', user_id=post[0]) }}">Unpublish</a>
-              {% endif %}
-                 {% if post[3] == 'draft' %}
-                    <a href="{{ url_for('publish', user_id=post[0]) }} {{ post[0] }}">Publish</a>
-              {% endif %}
-                </td>
-                <td>
-                    <a>Edit</a>
-                </td>
-                <td>
-                    <a>Delete</a>
-                </td>
-            </tr>
-
-        {% endfor %}
-    </table>
-
+    <div class="posts-container">
+        <table class="posts-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ post[1] }}</td>
+                    <td>{{ post[3] }}</td>
+                    <td class="actions-cell">
+                        {% if post[3] == 'published' %}
+                            <a href="{{ url_for('unpublish', post_id=post[0]) }}" class="post-action-btn">Unpublish</a>
+                        {% endif %}
+                        {% if post[3] == 'draft' %}
+                            <a href="{{ url_for('publish', post_id=post[0]) }}" class="post-action-btn">Publish</a>
+                        {% endif %}
+                        <a href="{{ url_for('edit', post_id=post[0]) }}" class="post-action-btn">Edit</a>
+                        <a href="{{ url_for('delete', post_id=post[0]) }}" class="post-action-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

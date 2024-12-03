@@ -106,3 +106,57 @@ def unpublish_post(post_id):
         # Close the connection after the operation
         conn.close()
         print("connection closed")
+
+def delete_post(post_id):
+    cursor, conn = db_connection()
+    try:
+        conn.execute(
+            'DELETE FROM posts WHERE post_id = ?',
+            (post_id,)
+        )
+        conn.commit()
+        print("Post Deleted: ")
+        return True
+    except Exception as e:
+        print(f"Error retrieving posts: {e}")
+        return False
+    finally:
+        # Close the connection after the operation
+        conn.close()
+        print("connection closed")
+
+def get_post(post_id):
+    cursor, conn = db_connection()
+    try:
+        post = cursor.execute(
+            'SELECT * FROM posts WHERE post_id = ?',
+            (post_id,)
+        ).fetchone()
+        conn.commit()
+        print("Post Fetched: ")
+        return post
+    except Exception as e:
+        print(f"Error retrieving posts: {e}")
+        return None
+    finally:
+        # Close the connection after the operation
+        conn.close()
+        print("connection closed")
+
+def update_post(post_id, title, content):
+    cursor, conn = db_connection()
+    try:
+        conn.execute(
+            'UPDATE posts SET title = ?, content = ? WHERE post_id = ?',
+            (title,content,post_id)
+        )
+        conn.commit()
+        print("Post updated: ")
+        return True
+    except Exception as e:
+        print(f"Error retrieving posts: {e}")
+        return False
+    finally:
+        # Close the connection after the operation
+        conn.close()
+        print("connection closed")
