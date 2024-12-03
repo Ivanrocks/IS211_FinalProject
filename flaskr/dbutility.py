@@ -23,16 +23,85 @@ def authenticate_user(email, password):
         # Close the connection after the operation
         conn.close()
 
+def create_post(postContent, title, user_id):
+    cursor, conn = db_connection()
+
+    try:
+        conn.execute(
+            'INSERT INTO posts(title, content, status, published_date, user_id) VALUES (?, ?, "draft", CURRENT_TIMESTAMP, ?)',
+            (title,postContent, user_id))
+        conn.commit()
+        print("Post created: " ,cursor.lastrowid)
+        return True
+    except Exception as e:
+        print(f"Error creating Post: {e}" )
+        return False
+    finally:
+        conn.close()
+
+def get_all_posts_by_user(user_id):
+    cursor, conn = db_connection()
+    try:
+        posts = cursor.execute(
+            "SELECT * FROM posts WHERE user_id is ? ORDER BY published_date ASC",
+            (user_id,)
+        ).fetchall()
+        conn.commit()
+        return posts
+    except Exception as e:
+        print(f"Error fetching Post: {e}" )
+        return []
+    finally:
+        conn.close()
+
+
+
 def get_all_posts():
     cursor, conn = db_connection()
     try:
         blogs = cursor.execute(
-            "SELECT * FROM posts"
+            "SELECT * FROM posts WHERE status is 'published' ORDER BY published_date ASC"
         ).fetchall()
         return blogs
     except Exception as e:
         print(f"Error retrieving posts: {e}")
         return []
+    finally:
+        # Close the connection after the operation
+        conn.close()
+        print("connection closed")
+
+def publish_post(post_id):
+    cursor, conn = db_connection()
+    try:
+        conn.execute(
+            'UPDATE posts SET status = "published" WHERE post_id = ?',
+            (post_id,)
+        )
+        conn.commit()
+        print("Post updated: ")
+        return True
+    except Exception as e:
+        print(f"Error retrieving posts: {e}")
+        return False
+    finally:
+        # Close the connection after the operation
+        conn.close()
+        print("connection closed")
+
+def unpublish_post(post_id):
+    cursor, conn = db_connection()
+    try:
+        conn.execute(
+            'UPDATE posts SET status = "draft" WHERE post_id = ?',
+            (post_id,)
+        )
+        conn.commit()
+        print("Post updated: ")
+        return True
+    except Exception as e:
+        print(f"Error retrieving posts: {e}")
+        return False
     finally:
         # Close the connection after the operation
         conn.close()

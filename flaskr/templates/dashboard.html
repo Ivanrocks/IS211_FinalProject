@@ -17,22 +17,31 @@
 
     </ul>
     <hr>
-    <div>
+    <table>
         {% for post in posts %}
-            <div>
-                <div>
+            <tr>
+
+                <td>
                     Title: {{ post[1] }}
-                </div>
-                <div>
-                    {{ post[2] }}
-                </div>
-                <div>
-                    Published Date: {{ post[4] }}
-                </div>
-            </div>
+                </td>
+                <td>
+                    {% if post[3] == 'published' %}
+                    <a href="{{ url_for('unpublish', user_id=post[0]) }}">Unpublish</a>
+              {% endif %}
+                 {% if post[3] == 'draft' %}
+                    <a href="{{ url_for('publish', user_id=post[0]) }} {{ post[0] }}">Publish</a>
+              {% endif %}
+                </td>
+                <td>
+                    <a>Edit</a>
+                </td>
+                <td>
+                    <a>Delete</a>
+                </td>
+            </tr>
 
         {% endfor %}
-    </div>
+    </table>
 
 </body>
 </html>

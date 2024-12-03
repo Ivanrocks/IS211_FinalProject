@@ -1,5 +1,4 @@
 -- Drop existing tables
-DROP TABLE IF EXISTS postsauthors;
 DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS authors;
 
@@ -28,33 +27,24 @@ CREATE TABLE posts(
     title TEXT NOT NULL,
     content TEXT NOT NULL,
     status TEXT CHECK(status IN ('draft', 'published')) DEFAULT 'draft',
-    published_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    published_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES authors(user_id)
 );
 
--- Create the postsauthors table
-CREATE TABLE postsauthors(
-    author_id INTEGER NOT NULL,
-    post_id INTEGER NOT NULL,
-    role TEXT CHECK(role IN ('author', 'co-author')) DEFAULT 'author',
-    PRIMARY KEY (author_id, post_id),
-    FOREIGN KEY (author_id) REFERENCES authors(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
-);
+
 
 -- Insert 10 sample posts
-INSERT INTO posts (title, content, status, published_date)
+INSERT INTO posts (title, content, status, published_date, user_id)
 VALUES
-("Welcome Post", "This is the first post on the blog!", "published", CURRENT_TIMESTAMP),
-("Upcoming Features", "Here's a sneak peek at upcoming features.", "draft", NULL),
-("How to Use This Blog", "A guide on how to navigate and use the blog.", "published", CURRENT_TIMESTAMP),
-("Development Updates", "Weekly updates from the development team.", "draft", NULL),
-("Meet the Admin", "An introduction to the admin of this blog.", "published", CURRENT_TIMESTAMP),
-("Community Guidelines", "Please follow these guidelines when engaging with others.", "published", CURRENT_TIMESTAMP),
-("Feature Requests", "Submit your feature requests here!", "draft", NULL),
-("Bug Reports", "Found a bug? Let us know!", "draft", NULL),
-("Blog Customization", "Learn how to customize your blog appearance.", "published", CURRENT_TIMESTAMP),
-("Thank You", "A message of appreciation to all users.", "published", CURRENT_TIMESTAMP);
+("Welcome Post", "This is the first post on the blog!", "published", CURRENT_TIMESTAMP, 1),
+("Upcoming Features", "Here's a sneak peek at upcoming features.", "draft", CURRENT_TIMESTAMP, 1),
+("How to Use This Blog", "A guide on how to navigate and use the blog.", "published", CURRENT_TIMESTAMP, 1),
+("Development Updates", "Weekly updates from the development team.", "draft", CURRENT_TIMESTAMP, 1),
+("Meet the Admin", "An introduction to the admin of this blog.", "published", CURRENT_TIMESTAMP, 1),
+("Community Guidelines", "Please follow these guidelines when engaging with others.", "published", CURRENT_TIMESTAMP, 1),
+("Feature Requests", "Submit your feature requests here!", "draft", CURRENT_TIMESTAMP, 1),
+("Bug Reports", "Found a bug? Let us know!", "draft", CURRENT_TIMESTAMP, 1),
+("Blog Customization", "Learn how to customize your blog appearance.", "published", CURRENT_TIMESTAMP, 1),
+("Thank You", "A message of appreciation to all users.", "published", CURRENT_TIMESTAMP, 1);
 
--- Associate all posts with the admin user
-INSERT INTO postsauthors (author_id, post_id, role)
-SELECT 1, post_id, 'author' FROM posts;
