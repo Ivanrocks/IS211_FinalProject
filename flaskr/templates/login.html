@@ -1,24 +1,96 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .login-form-container {
+            background: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 1em;
+        }
+        .login-form-group {
+            margin-bottom: 1em;
+            text-align: left;
+        }
+        .login-label {
+            display: block;
+            margin-bottom: 0.5em;
+            color: #555;
+        }
+        .login-input {
+            width: 100%;
+            padding: 0.75em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        .login-submit-btn {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.75em 1.5em;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+        }
+        .login-submit-btn:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 1em;
+        }
+        li {
+            padding: 0.5em;
+            margin-bottom: 0.5em;
+            border-radius: 4px;
+            color: #fff;
+        }
+        li.error {
+            background-color: #dc3545;
+        }
+        li.success {
+            background-color: #28a745;
+        }
+    </style>
 </head>
 <body>
-<h1 class="login-title">Log In</h1>
+    <form method="post" action="/login" class="login-form-container">
+        <h1 class="login-title">Log In</h1>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul>
-          {% for category, message in messages %}
-            <li class="{{ category }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
-<form method="post" action="/login" class="login-form-container">
         <div class="login-form-group">
             <label for="email" class="login-label">Email:</label>
             <input type="text" name="email" id="email" class="login-input" required>

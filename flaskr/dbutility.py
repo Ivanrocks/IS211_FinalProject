@@ -60,7 +60,7 @@ def get_all_posts():
     cursor, conn = db_connection()
     try:
         blogs = cursor.execute(
-            "SELECT * FROM posts WHERE status is 'published' ORDER BY published_date ASC"
+            "SELECT * FROM posts WHERE status is 'published' ORDER BY published_date DESC"
         ).fetchall()
         return blogs
     except Exception as e:
